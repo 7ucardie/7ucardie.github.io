@@ -1,0 +1,15 @@
+---
+import { SITE } from '../site.config.mjs';
+import { formatDate, readingTime, type Post } from '../lib/posts';
+
+interface Props { post: Post }
+const { post } = Astro.props;
+const author = post.data.author ?? SITE.author.name;
+---
+<a href={`/blog/${post.id}`} class="blog-card">
+  <div class="blog-card-tag">{post.data.category}</div>
+  <div class="blog-card-title">{post.data.title}</div>
+  <div class="blog-card-desc">{post.data.description}</div>
+  <div class="blog-card-meta">{author} // {formatDate(post.data.pubDate)} // {readingTime(post.body)} min read</div>
+  <div class="blog-card-link">READ ARTICLE &rarr;</div>
+</a>

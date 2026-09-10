@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE } from '../site.config.mjs';
+import { getPosts } from '../lib/posts';
+
+const posts = (await getPosts()).slice(0, 4);
+---
+<Base title={SITE.title} description={SITE.description}>
+  <section class="home-hero">
+    <div class="wrap">
+      <div class="sec-label">// {SITE.name}</div>
+      <h1>{SITE.title}<span class="accent">.</span></h1>
+      <p>{SITE.description}</p>
+      <div class="home-actions">
+        <a href="/blog" class="btn-primary"><span>READ THE BLOG</span></a>
+        {SITE.github && <a href={SITE.github} class="btn-ghost" target="_blank" rel="noopener noreferrer"><span>GITHUB</span></a>}
+      </div>
+    </div>
+  </section>
+
+  <div class="pixel-div" aria-hidden="true">
+    <div style="background:var(--white)"></div><div style="background:var(--steel)"></div><div style="background:var(--teal)"></div><div style="background:var(--graphite)"></div><div style="background:var(--navy)"></div>
+  </div>
+
+  <section class="section" style="padding-top:64px">
+    <div class="wrap">
+      <div class="sec-label">// LATEST</div>
+      <h2 class="sec-title">RECENT <span class="accent">POSTS.</span></h2>
+      {posts.length === 0 ? (
+        <p class="empty">No posts yet. Add a markdown file to <code>src/content/blog/</code> to get started.</p>
+      ) : (
+        <div class="blog-grid">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>

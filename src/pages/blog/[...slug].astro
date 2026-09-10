@@ -1,0 +1,115 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../site.config.mjs';
+import { getPosts, formatDate, readingTime, related } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const author = post.data.author ?? SITE.author.name;
+const minutes = readingTime(post.body);
+const more = related(post, posts);
+const url = new URL(`/blog/${post.id}`, Astro.site).toString();
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+    author: { '@type': 'Person', name: author },
+    mainEntityOfPage: url,
+    ...(post.data.heroImage ? { image: new URL(post.data.heroImage, Astro.site).toString() } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: SITE.title, item: Astro.site?.toString() },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog', Astro.site).toString() },
+      { '@type': 'ListItem', position: 3, name: post.data.title, item: url },
+    ],
+  },
+];
+---
+<Base title={`${post.data.title} | ${SITE.title}`} description={post.data.description} type="article" image={post.data.heroImage} jsonLd={jsonLd}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog">Blog</a><span>/</span>{post.data.title}</nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">// {post.data.category}</div>
+      <h1>{post.data.title}</h1>
+      <p class="dek">{post.data.description}</p>
+      <div class="meta">
+        <span>{author}</span>
+        <span>//</span>
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        {post.data.updatedDate && (
+          <>
+            <span>//</span>
+            <span>Updated <time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time></span>
+          </>
+        )}
+        <span>//</span>
+        <span>{minutes} min read</span>
+      </div>
+      {post.data.heroImage && <img class="hero-image" src={post.data.heroImage} alt="" loading="eager" />}
+    </div>
+  </section>
+
+  <section class="article-shell">
+    <div class="wrap">
+      <article class="article">
+        <Content />
+        {post.data.tags.length > 0 && (
+          <div class="tags">
+            {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        )}
+      </article>
+    </div>
+  </section>
+
+  <section class="author">
+    <div class="wrap">
+      <div class="section-label">// AUTHOR</div>
+      <div class="author-card">
+        <h2>{author}</h2>
+        <p>{SITE.author.bio}</p>
+        {SITE.author.url && <a href={SITE.author.url}>More &rarr;</a>}
+      </div>
+    </div>
+  </section>
+
+  {more.length > 0 && (
+    <section class="related">
+      <div class="wrap">
+        <div class="section-label">// RELATED</div>
+        <h2 class="section-title">KEEP READING</h2>
+        <div class="related-grid">
+          {more.map((p) => (
+            <div class="related-card">
+              <h3>{p.data.title}</h3>
+              <p>{p.data.description}</p>
+              <a href={`/blog/${p.id}`}>READ ARTICLE &rarr;</a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="final-cta">
+    <h2>MORE POSTS.</h2>
+    <a href="/blog" class="btn-primary"><span>BACK TO THE BLOG</span></a>
+  </section>
+</Base>

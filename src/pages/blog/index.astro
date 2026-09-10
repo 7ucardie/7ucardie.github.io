@@ -1,0 +1,51 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { SITE } from '../../site.config.mjs';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const [headA, headB] = SITE.blogHeading;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: SITE.title,
+    description: SITE.description,
+    url: new URL('/blog', Astro.site).toString(),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: SITE.title, item: Astro.site?.toString() },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: new URL('/blog', Astro.site).toString() },
+    ],
+  },
+];
+---
+<Base title={`Blog | ${SITE.title}`} description={SITE.blogIntro} jsonLd={jsonLd}>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>Blog</nav>
+  </div>
+
+  <section class="section" style="padding-top:0;padding-bottom:40px">
+    <div class="wrap">
+      <div class="sec-label">// BLOG</div>
+      <h1 class="sec-title" style="font-size:clamp(28px,6vw,64px)">{headA}<br /><span class="accent">{headB}</span></h1>
+      <p class="sec-sub">{SITE.blogIntro}</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap">
+      {posts.length === 0 ? (
+        <p class="empty">No posts yet. Add a markdown file to <code>src/content/blog/</code> to get started.</p>
+      ) : (
+        <div class="blog-grid">
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
