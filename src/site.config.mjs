@@ -1,7 +1,7 @@
 // Single place to brand the site. Every page reads from here.
 export const SITE = {
-  // Used for canonical URLs, sitemap, RSS, and Open Graph. Change before deploying.
-  url: 'https://example.com',
+  // Used for canonical URLs, sitemap, RSS, and Open Graph.
+  url: 'https://7ucardie.github.io',
   // Shown in the nav brand and page titles.
   name: 'BLOG',
   title: 'Blog',
@@ -12,7 +12,7 @@ export const SITE = {
     url: 'https://www.evandervecht.nl',
   },
   // Links shown in the top-right of the nav and in the footer.
-  github: 'https://github.com/evandervecht',
+  github: 'https://github.com/7ucardie',
   nav: [
     { label: 'HOME', href: '/' },
     { label: 'BLOG', href: '/blog' },
@@ -20,7 +20,7 @@ export const SITE = {
   footerLinks: [
     { label: 'evandervecht.nl', href: 'https://www.evandervecht.nl' },
     { label: 'LinkedIn', href: 'https://nl.linkedin.com/in/ellert-van-der-vecht-1009b11b' },
-    { label: 'GitHub', href: 'https://github.com/evandervecht' },
+    { label: 'GitHub', href: 'https://github.com/7ucardie' },
     { label: 'RSS', href: '/rss.xml' },
   ],
   // Default social share image (1200x630) used when a page or post has none. Lives in public/.

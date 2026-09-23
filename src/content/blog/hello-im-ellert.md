@@ -43,4 +43,4 @@ That's what this blog is for. Most posts will come straight out of the repositor
 
 Gamer, father, builder. Some of that will leak into the posts too.
 
-If you want to reach me, the easiest routes are [GitHub](https://github.com/evandervecht) and [LinkedIn](https://nl.linkedin.com/in/ellert-van-der-vecht-1009b11b). Thanks for reading.
+If you want to reach me, the easiest routes are [GitHub](https://github.com/7ucardie) and [LinkedIn](https://nl.linkedin.com/in/ellert-van-der-vecht-1009b11b). Thanks for reading.
