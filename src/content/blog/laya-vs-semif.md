@@ -7,7 +7,7 @@ category: "DEEP DIVE"
 tags: ["ai", "llm routing", "claude code", "codex", "local models", "mlx", "qwen"]
 heroImage: "/images/laya-vs-semif/hero.webp"
 source: "github.com/7ucardie/trivium (Python, MLX, semif 1f2dea3)"
-draft: false
+draft: true
 ---
 
 I pay for Claude Code and for Codex, and for months I sent almost every prompt to whichever frontier model happened to be open. "What does HTTP 409 mean" went to the same model as "find out why memory grows until the server is killed". Picking a model by hand for every prompt is just enough friction that nobody does it.
